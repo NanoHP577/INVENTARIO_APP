@@ -1,0 +1,16 @@
+/* pegar aquí el style.css avanzado que te di anteriormente */
+body { font-family: 'Poppins', sans-serif; background: linear-gradient(120deg,#f0f4ff,#dbe9ff); margin:0; color:#333;}
+header{background:linear-gradient(90deg,#004aad,#0077b6);color:#fff;padding:18px 24px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:20px}
+header .right a{color:#fff;text-decoration:none;background:#023e8a;padding:8px 12px;border-radius:8px}
+.container{width:90%;max-width:1100px;margin:28px auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+.card{margin-bottom:20px;padding:16px;border-radius:10px;background:#fff}
+.form{display:flex;flex-wrap:wrap;gap:10px}
+.form input,.form select{flex:1 1 200px;padding:10px;border-radius:8px;border:1px solid #ddd}
+.form button{padding:10px 16px;background:#0077b6;border:none;color:#fff;border-radius:8px;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{padding:10px;text-align:center;border-bottom:1px solid #eee}
+th{background:#0077b6;color:#fff}
+a{color:#0077b6;text-decoration:none}
+.btn-cancel{display:inline-block;padding:8px 12px;background:#adb5bd;color:#fff;border-radius:8px;text-decoration:none}
+@media(max-width:700px){.form{flex-direction:column}}
