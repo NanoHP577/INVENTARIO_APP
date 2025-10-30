@@ -5,11 +5,11 @@ require 'conexion.php';
 $usuario = $_POST['usuario'];
 $password = $_POST['password'];
 
-$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE usuario = ?");
-$stmt->execute([$usuario]);
+$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE usuario = ? OR cedula = ?");
+$stmt->execute([$usuario, $usuario]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($user && password_verify($password, $user['password'])) {
+if ($user && $password == $user['password']) {
     $_SESSION['usuario'] = $user['usuario'];
     $_SESSION['rol'] = $user['rol'];
     header("Location: dashboard.php");
