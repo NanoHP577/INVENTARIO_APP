@@ -1,8 +1,8 @@
 <?php
-$host = "localhost";
-$dbname = "inventario_db";
-$user = "root"; // Cambia por tu usuario AlwaysData
-$pass = ""; // Cambia por tu contraseña AlwaysData
+$host = "mysql-juandi.alwaysdata.net";
+$dbname = "juandi_inventario";
+$user = "juandi"; // Cambia por tu usuario AlwaysData
+$pass = "Misifu1234"; // Cambia por tu contraseña AlwaysData
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
