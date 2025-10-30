@@ -1,10 +1,10 @@
 <?php
 // src/db.php
 // Ajusta las constantes según tu entorno (LOCAL o AlwaysData)
-define('DB_HOST', 'mysql-juandy.alwaysdata.net');
-define('DB_NAME', 'juandy_inventario');
-define('DB_USER', 'juandy');
-define('DB_PASS', 'Misifu123+'); // XAMPP: '' ; AlwaysData: cambiar por credenciales del panel
+define('DB_HOST', 'mysql-juandi.alwaysdata.net');
+define('DB_NAME', 'juandi_inventario');
+define('DB_USER', 'juandi');
+define('DB_PASS', 'Misifu1234'); // XAMPP: '' ; AlwaysData: cambiar por credenciales del panel
 
 $options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
