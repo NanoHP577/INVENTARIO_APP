@@ -1,35 +1,45 @@
 <?php
+// dashboard.php
 session_start();
-if(!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
+if(!isset($_SESSION['cedula'])) {
+    header('Location: login.php');
     exit;
 }
+$cedula = $_SESSION['cedula'];
+$nombre = $_SESSION['nombre'];
 ?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Panel Principal</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <title>Dashboard - Inventario</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1>📦 Inventario Empresarial</h1>
-  <p>Bienvenido, <strong><?= $_SESSION['usuario'] ?></strong> (<?= $_SESSION['rol'] ?>)</p>
-  <nav>
-    <a href="productos.php">🛒 Productos</a>
-    <?php if($_SESSION['rol']=='admin'): ?>
-      <a href="usuarios.php">👥 Usuarios</a>
-      <a href="historial.php">📜 Historial</a>
-    <?php endif; ?>
-    <a href="logout.php">🚪 Cerrar sesión</a>
-  </nav>
-</header>
+  <div class="header">
+    <h1>Panel de Control</h1>
+    <div>
+      <span class="small">Usuario: <?= htmlspecialchars($nombre) ?> (<?= htmlspecialchars($cedula) ?>)</span>
+      <a href="logout.php">Cerrar sesión</a>
+    </div>
+  </div>
 
-<div class="container">
-  <h2>Bienvenido al sistema de inventario</h2>
-  <p>Desde este panel puedes gestionar productos, usuarios y revisar el historial de movimientos.</p>
-</div>
+  <div class="container">
+    <h2>Bienvenido, <?= htmlspecialchars($nombre) ?></h2>
+
+    <?php if($cedula === '1111'): ?>
+      <!-- Mostrar dos botones al admin con cedula 1111 -->
+      <div style="display:flex;gap:12px;margin-top:18px">
+        <a href="usuarios.php"><button>Gestión de Usuarios</button></a>
+        <a href="articulos.php"><button>Gestión de Artículos</button></a>
+      </div>
+    <?php else: ?>
+      <!-- A los demás usuarios solo abrir gestión de artículos -->
+      <div style="margin-top:18px">
+        <a href="articulos.php"><button>Ir a Gestión de Artículos</button></a>
+      </div>
+    <?php endif; ?>
+
+  </div>
 </body>
 </html>
-

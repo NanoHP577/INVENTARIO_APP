@@ -1,67 +1,73 @@
 <?php
+// usuarios.php
 session_start();
 require 'conexion.php';
+if(!isset($_SESSION['cedula'])) { header('Location: login.php'); exit; }
+// Solo admin (cedula 1111) puede acceder a esta página
+if($_SESSION['cedula'] !== '1111') { header('Location: dashboard.php'); exit; }
 
-// Solo el administrador puede acceder
-if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != 'admin') {
-    header("Location: dashboard.php");
+// Manejo de POST para agregar usuario
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $cedula = trim($_POST['cedula'] ?? '');
+    $nombre = trim($_POST['nombre'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    if($cedula !== '' && $nombre !== '' && $password !== '') {
+        $stmt = $pdo->prepare("INSERT INTO usuarios (cedula,nombre,password) VALUES (?,?,?)");
+        try {
+            $stmt->execute([$cedula,$nombre,$password]);
+        } catch (PDOException $e) {
+            $error = "No se pudo agregar: " . $e->getMessage();
+        }
+    }
+    header("Location: usuarios.php");
     exit;
 }
 
-// Agregar usuario
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $usuario = $_POST['usuario'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $rol = $_POST['rol'];
-
-    $stmt = $pdo->prepare("INSERT INTO usuarios (usuario, password, rol) VALUES (?,?,?)");
-    $stmt->execute([$usuario, $password, $rol]);
-}
-
-// Eliminar usuario
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
+// Eliminar usuario (GET delete)
+if(isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
     $pdo->prepare("DELETE FROM usuarios WHERE id = ?")->execute([$id]);
+    header("Location: usuarios.php");
+    exit;
 }
 
-$usuarios = $pdo->query("SELECT * FROM usuarios")->fetchAll(PDO::FETCH_ASSOC);
+$users = $pdo->query("SELECT id,cedula,nombre FROM usuarios ORDER BY nombre")->fetchAll();
 ?>
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Gestión de Usuarios</title>
+  <meta charset="utf-8">
+  <title>Usuarios - Inventario</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>👥 Administración de Usuarios</h1>
-    <a href="dashboard.php">⬅ Volver</a>
-  </header>
-
+  <div class="header"><h1>Gestión de Usuarios</h1><div><a href="dashboard.php">Volver</a> | <a href="logout.php">Salir</a></div></div>
   <div class="container">
-    <h2>Agregar Nuevo Usuario</h2>
-    <form method="POST">
-      <input type="text" name="usuario" placeholder="Usuario" required>
-      <input type="password" name="password" placeholder="Contraseña" required>
-      <select name="rol" required>
-        <option value="empleado">Empleado</option>
-        <option value="admin">Administrador</option>
-      </select>
-      <button type="submit">Agregar Usuario</button>
+    <h2>Agregar Usuario</h2>
+    <form method="post">
+      <input type="text" name="cedula" placeholder="Cédula" required>
+      <input type="text" name="nombre" placeholder="Nombre completo" required>
+      <input type="text" name="password" placeholder="Contraseña (texto plano)" required>
+      <button type="submit">Agregar</button>
     </form>
 
     <h2>Usuarios Registrados</h2>
-    <table>
-      <tr><th>ID</th><th>Usuario</th><th>Rol</th><th>Acción</th></tr>
-      <?php foreach ($usuarios as $u): ?>
-      <tr>
-        <td><?= $u['id'] ?></td>
-        <td><?= $u['usuario'] ?></td>
-        <td><?= $u['rol'] ?></td>
-        <td><a href="?delete=<?= $u['id'] ?>" onclick="return confirm('¿Eliminar usuario?')">🗑️</a></td>
-      </tr>
+    <table class="table">
+      <tr><th>ID</th><th>Cédula</th><th>Nombre</th><th>Acción</th></tr>
+      <?php foreach($users as $u): ?>
+        <tr>
+          <td><?= $u['id'] ?></td>
+          <td><?= htmlspecialchars($u['cedula']) ?></td>
+          <td><?= htmlspecialchars($u['nombre']) ?></td>
+          <td>
+            <a class="link" href="editar_usuario.php?id=<?= $u['id'] ?>">Editar</a> |
+            <?php if($u['cedula'] !== '1111'): ?>
+              <a class="link" href="usuarios.php?delete=<?= $u['id'] ?>" onclick="return confirm('Eliminar usuario?')">Eliminar</a>
+            <?php else: ?>
+              <span class="small">(admin)</span>
+            <?php endif; ?>
+          </td>
+        </tr>
       <?php endforeach; ?>
     </table>
   </div>

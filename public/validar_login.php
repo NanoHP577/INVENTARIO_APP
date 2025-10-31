@@ -1,19 +1,27 @@
 <?php
+// validar_login.php
 session_start();
 require 'conexion.php';
 
-$usuario = $_POST['usuario'];
-$password = $_POST['password'];
-
-$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE usuario = ? OR cedula = ?");
-$stmt->execute([$usuario, $usuario]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if ($user && $password == $user['password']) {
-    $_SESSION['usuario'] = $user['usuario'];
-    $_SESSION['rol'] = $user['rol'];
-    header("Location: dashboard.php");
-} else {
-    header("Location: login.php?error=1");
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: login.php');
+    exit;
 }
-?>
+
+$cedula = trim($_POST['cedula'] ?? '');
+$password = trim($_POST['password'] ?? '');
+
+$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE cedula = ?");
+$stmt->execute([$cedula]);
+$user = $stmt->fetch();
+
+if ($user && $password === $user['password']) {
+    // Guardar en sesión
+    $_SESSION['cedula'] = $user['cedula'];
+    $_SESSION['nombre'] = $user['nombre'];
+    header('Location: dashboard.php');
+    exit;
+} else {
+    header('Location: login.php?error=1');
+    exit;
+}

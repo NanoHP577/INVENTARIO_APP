@@ -1,13 +1,17 @@
 <?php
-$host = "mysql-juandi.alwaysdata.net";
-$dbname = "juandi_inventario";
-$user = "juandi"; // Cambia por tu usuario AlwaysData
-$pass = "Misifu1234"; // Cambia por tu contraseña AlwaysData
+// conexion.php
+$DB_HOST = ' mysql-juandi.alwaysdata.net';
+$DB_NAME = 'juandi_inventario';
+$DB_USER = 'juandi';
+$DB_PASS = 'Misifu1234';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8mb4", $DB_USER, $DB_PASS, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
 } catch (PDOException $e) {
-    die("❌ Error de conexión: " . $e->getMessage());
+    // En producción no mostrar el detalle
+    die("Error de conexión a la base de datos: " . $e->getMessage());
 }
 ?>
