@@ -1,6 +1,6 @@
 <?php
 // conexion.php
-$DB_HOST = ' mysql-juandi.alwaysdata.net';
+$DB_HOST = 'mysql-juandi.alwaysdata.net';
 $DB_NAME = 'juandi_inventario';
 $DB_USER = 'juandi';
 $DB_PASS = 'Misifu1234';
