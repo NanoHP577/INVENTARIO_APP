@@ -25,7 +25,7 @@ $nombre = $_SESSION['nombre'];
   </div>
 
   <div class="container">
-    <h2>Bienvenido, <?= htmlspecialchars($nombre) ?></h2>
+    <h2>Bienvenido al sistema, <?= htmlspecialchars($nombre) ?></h2>
 
     <?php if($cedula === '1111'): ?>
       <!-- Mostrar dos botones al admin con cedula 1111 -->
